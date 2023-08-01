@@ -58,6 +58,12 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             *counter += 1;
         }
     }
+
+    // Convert the HasMap into a Vec of (domain, count) tuples
+    let mut domain_counts: Vec<(_, _)> = domain_counts.into_iter().collect();
+    // Sort the Vec in descending order by count
+    domain_counts.sort_by(|a, b|b.1.cmp(&a.1));
+
     // Convert the HashMap into JSON and write it to a file
     let output = serde_json::to_string_pretty(&domain_counts)?;
     write("data/output/domains.json", output)?;
