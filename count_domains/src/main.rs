@@ -1,10 +1,11 @@
 use serde::Deserialize;
 // use serde_json::json;
-use std::fs::{File, write};
-use std::io::BufReader;
+use std::fs::{File, OpenOptions};
+use std::io::{Write, BufReader};
 use std::path::Path;
 use std::collections::HashMap;
 use url::Url;
+
 
 #[derive(Debug, Deserialize)]
 #[allow(non_snake_case)]
@@ -60,13 +61,20 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
 
     // Convert the HasMap into a Vec of (domain, count) tuples
-    let mut domain_counts: Vec<(_, _)> = domain_counts.into_iter().collect();
+    let mut domain_counts_vec: Vec<(_, _)> = domain_counts.into_iter().collect();
+
     // Sort the Vec in descending order by count
-    domain_counts.sort_by(|a, b|b.1.cmp(&a.1));
+    domain_counts_vec.sort_by(|a, b|b.1.cmp(&a.1));
 
-    // Convert the HashMap into JSON and write it to a file
-    let output = serde_json::to_string_pretty(&domain_counts)?;
-    write("data/output/domains.json", output)?;
+    // Open the output file in write mode, create it if if does not exist
+    let mut file = OpenOptions::new()
+        .write(true)
+        .create(true)
+        .open("data/output/domains.txt")?;
 
+    for (domain, count) in domain_counts_vec {
+        writeln!(file, "\"{}\": {}", domain, count)?;
+    }
+    
     Ok(())
 }
