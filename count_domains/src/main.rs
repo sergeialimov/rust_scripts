@@ -1,5 +1,6 @@
 use serde::Deserialize;
-use std::fs::File;
+// use serde_json::json;
+use std::fs::{File, write};
 use std::io::BufReader;
 use std::path::Path;
 use std::collections::HashMap;
@@ -57,5 +58,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             *counter += 1;
         }
     }
+    // Convert the HashMap into JSON and write it to a file
+    let output = serde_json::to_string_pretty(&domain_counts)?;
+    write("data/output/domains.json", output)?;
+
     Ok(())
 }
