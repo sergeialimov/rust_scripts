@@ -1,5 +1,4 @@
 use serde::Deserialize;
-// use serde_json::json;
 use std::fs::{File, OpenOptions};
 use std::io::{Write, BufReader};
 use std::path::Path;
@@ -8,29 +7,28 @@ use url::Url;
 
 
 #[derive(Debug, Deserialize)]
-#[allow(non_snake_case)]
-////test
+#[allow(non_snake_case, unused)]
 struct Publication {
-    // issnL: Option<String>,
-    // publicationName: String,
-    // advertiserTag: u32,
-    // publicationType: u32,
+    issnL: Option<String>,
+    publicationName: String,
+    advertiserTag: u32,
+    publicationType: u32,
 }
 
 #[derive(Debug, Deserialize)]
-#[allow(non_snake_case)]
+#[allow(non_snake_case, unused)]
 struct PublicationUrl {
     url: String,
-    // isMirror: u32,
+    isMirror: u32,
 }
 
 #[derive(Debug, Deserialize)]
-#[allow(non_snake_case)]
+#[allow(non_snake_case, unused)]
 struct Data {
-    // publication: Publication,
+    publication: Publication,
     publicationUrl: PublicationUrl,
-    // issns: Vec<String>,
-    // websiteId: u32,
+    issns: Vec<String>,
+    websiteId: u32,
 }
 
 fn read_json_file<P: AsRef<Path>>(path: P) -> Result<Vec<Data>, Box<dyn std::error::Error>> {
