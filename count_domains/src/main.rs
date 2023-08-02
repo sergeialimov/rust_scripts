@@ -1,10 +1,10 @@
-use serde::Deserialize;
-use std::fs::{File, OpenOptions};
-use std::io::{Write, BufReader};
-use std::path::Path;
+use serde::{Deserialize, Serialize};
+use serde_json::to_string;
 use std::collections::HashMap;
+use std::fs::File;
+use std::io::{BufReader, Write};
+use std::path::Path;
 use url::Url;
-
 
 #[derive(Debug, Deserialize)]
 #[allow(non_snake_case, unused)]
@@ -31,6 +31,12 @@ struct Data {
     websiteId: u32,
 }
 
+#[derive(Debug, Clone, Serialize, PartialEq, Eq)]
+struct WebsiteIdCount {
+    website_id: u32,
+    counter: u32,
+}
+
 fn read_json_file<P: AsRef<Path>>(path: P) -> Result<Vec<Data>, Box<dyn std::error::Error>> {
     // Open the file in read-only mode with buffer.
     let file = File::open(path)?;
@@ -46,33 +52,38 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let data = read_json_file(path)?;
 
-    let mut domain_counts: HashMap<String, i32> = HashMap::new();
+    let mut domains_counts: HashMap<String, WebsiteIdCount> = HashMap::new();
 
     for item in &data {
         let url_string = &item.publicationUrl.url;
         if !url_string.is_empty() {
             let url = Url::parse(url_string).unwrap();
-            let domain = url.domain().unwrap_or("");
-            let counter = domain_counts.entry(domain.to_string()).or_insert(0);
-            *counter += 1;
+            let website_id = item.websiteId;
+
+            let domain = url.domain().unwrap_or("").to_string();
+
+            let counter = domains_counts
+                .entry(domain.clone())
+                .or_insert(WebsiteIdCount {
+                    website_id,
+                    counter: 0,
+                });
+            counter.counter += 1;
         }
     }
 
-    // Convert the HasMap into a Vec of (domain, count) tuples
-    let mut domain_counts_vec: Vec<(_, _)> = domain_counts.into_iter().collect();
+    let mut domains_vec: Vec<(&String, &WebsiteIdCount)> = domains_counts.iter().collect();
 
-    // Sort the Vec in descending order by count
-    domain_counts_vec.sort_by(|a, b|b.1.cmp(&a.1));
+    // Sort the Vec based on the counter field of the WebsiteIdCount struct
+    domains_vec.sort_by(|a, b| b.1.counter.cmp(&a.1.counter));
 
-    // Open the output file in write mode, create it if if does not exist
-    let mut file = OpenOptions::new()
-        .write(true)
-        .create(true)
-        .open("data/output/domains.txt")?;
+    // Serialize the sorted Vec
+    let serialized = to_string(&domains_vec).unwrap();
 
-    for (domain, count) in domain_counts_vec {
-        writeln!(file, "\"{}\": {}", domain, count)?;
-    }
-    
+
+    // Write the serialized data to a file
+    let mut file = File::create("data/output/domains")?;
+    file.write_all(serialized.as_bytes())?;
+
     Ok(())
 }
