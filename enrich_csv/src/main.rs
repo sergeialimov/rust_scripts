@@ -17,7 +17,9 @@ fn main() {
     let file_path2 = "./data/input/superset_sep_17.csv";
     match csv_helper::read_csv_file::<types::WebsiteSupersetReport>(file_path2) {
         Ok(_data) => {
-            let map = service::website_id_superset_report_map(&_data);
+            let cleaned_data = service::clean_website_ids(&_data);
+
+            let map = service::website_id_superset_report_map(&cleaned_data);
 
             println!("{:?}", map.get("763"));
         }
