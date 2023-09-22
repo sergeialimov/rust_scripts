@@ -1,8 +1,7 @@
-use crate::types::WebsiteCommentsInput;
-
+use crate::types::WebsiteSupersetReport;
 use std::collections::HashMap;
 
-pub fn create_website_id_comment_map(input_data: &[WebsiteCommentsInput]) -> HashMap<String, WebsiteCommentsInput> {
+pub fn website_id_superset_report_map(input_data:&[WebsiteSupersetReport]) -> HashMap<String, WebsiteSupersetReport> {
     let mut map = HashMap::new();
 
     for item in input_data {
