@@ -1,1 +1,3 @@
 .DS_Store
+count_domains/target
+enrich_csv/target/**

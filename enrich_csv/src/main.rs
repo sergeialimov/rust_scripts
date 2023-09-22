@@ -7,7 +7,7 @@ fn main() {
     match csv_helper::read_csv_file::<types::WebsiteCommentsInput>(file_path1) {
         Ok(data) => {
             let map = service::create_website_id_comment_map(&data);
-            print!("{:?}", map.get("79657"));
+            
         }
         Err(err) => {
             eprintln!("Error reading CSV: {}", err);
