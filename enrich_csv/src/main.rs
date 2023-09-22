@@ -4,7 +4,8 @@ mod service;
 
 fn main() {
     let file_path1 = "./data/input/missing_issn.csv";
-    match csv_helper::read_csv_file::<types::WebsiteCommentsInput>(file_path1) {
+
+    match csv_helper::read_csv_file::<types::WebsiteCommentTypeReport>(file_path1) {
         Ok(_data) => {
             
             

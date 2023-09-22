@@ -1,7 +1,7 @@
 use serde::Deserialize;
 
 #[derive(Debug, Deserialize)]
-pub struct WebsiteCommentsInput {
+pub struct WebsiteCommentTypeReport {
     #[serde(rename = "websiteId")]
     pub website_id: String,
 
@@ -19,6 +19,9 @@ pub struct WebsiteCommentsInput {
 
     #[serde(rename = "comment")]
     pub comment: String,
+
+    #[serde(rename = "publicationType")]
+    pub publication_type: String,
 }
 
 #[derive(Debug, Deserialize, Clone)]
