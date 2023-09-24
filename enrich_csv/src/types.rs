@@ -1,4 +1,6 @@
 use serde::Deserialize;
+use serde::Serialize;
+// use serde_derive::Serialize;
 
 #[derive(Debug, Deserialize, Clone)]
 pub struct WebsiteCommentTypeReport {
@@ -24,7 +26,7 @@ pub struct WebsiteCommentTypeReport {
     pub publication_type: String,
 }
 
-#[derive(Debug, Deserialize, Clone)]
+#[derive(Debug, Deserialize, Clone, Serialize)]
 pub struct WebsiteSupersetReport {
     #[serde(rename = "Status")]
     pub status: String,
@@ -67,4 +69,12 @@ pub struct WebsiteSupersetReport {
 
     #[serde(rename = "Archived")]
     pub archived: String,
+
+    #[serde(rename = "Comment")]
+    #[serde(default)]
+    pub comment: String,
+
+    #[serde(rename = "Publication type")]
+    #[serde(default)]
+    pub publication_type: String,
 }
