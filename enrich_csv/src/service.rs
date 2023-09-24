@@ -8,7 +8,6 @@ pub fn website_id_superset_report_map(input_data:&[WebsiteSupersetReport]) -> Ha
     for item in input_data {
         map.insert(item.website_id.clone(), item.clone());
     }
-
     map
 }
 
@@ -23,7 +22,7 @@ pub fn clean_website_ids (input_data: &[WebsiteSupersetReport]) -> Vec<WebsiteSu
     res
 }
 
-pub fn clean_website_id (id: String) -> String {
+fn clean_website_id (id: String) -> String {
     if id.ends_with(".0") {
         let trimmed = &id[..id.len() -2];
         return trimmed.to_string();

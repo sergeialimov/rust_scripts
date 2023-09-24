@@ -4,12 +4,12 @@ mod service;
 
 fn main() {
     use crate::types::{ WebsiteCommentTypeReport, WebsiteSupersetReport };
-    let file_path1 = "./data/input/missing_issn.csv";
+    let file_path1 = "./data/input/comment_type_report.csv";
     let comment_type_report: Vec<WebsiteCommentTypeReport>;
     match csv_helper::read_csv_file::<WebsiteCommentTypeReport>(file_path1) {
         Ok(_data) => {
-            comment_type_report = service::having_type_or_comment(_data);
-            
+            comment_type_report = service::having_type_or_comment(&_data);
+            println!("{:?}", comment_type_report[0]);
         }
         Err(err) => {
             eprintln!("Error reading CSV: {}", err);
@@ -21,9 +21,9 @@ fn main() {
         Ok(_data) => {
             let cleaned_data = service::clean_website_ids(&_data);
 
-            let map = service::website_id_superset_report_map(&cleaned_data);
+            let _map = service::website_id_superset_report_map(&cleaned_data);
 
-            println!("{:?}", map.get("763"));
+            println!("{:?}", _map.get("763"));
         }
         Err(err) => {
             eprintln!("Error reading CSV: {}", err);
